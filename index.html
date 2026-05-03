@@ -59,7 +59,7 @@
 
   <div class="portal">
 
-    <input placeholder="Type a signal..." />
+    <input id="signal" placeholder="Type a signal..." />
 
     <br><br>
 
@@ -73,10 +73,32 @@
 
   <script>
     function discover() {
-      const result = document.getElementById("result");
 
-      result.innerText =
-        "Signal detected. Opening discovery path...";
+      const signal =
+        document.getElementById("signal").value;
+
+      const result =
+        document.getElementById("result");
+
+      if (signal.includes("moon")) {
+        result.innerText =
+          "Night discovery path detected 🌙";
+      }
+
+      else if (signal.includes("dream")) {
+        result.innerText =
+          "Dream world pathway opening ✨";
+      }
+
+      else if (signal.includes("rain")) {
+        result.innerText =
+          "Rain atmosphere detected ☔";
+      }
+
+      else {
+        result.innerText =
+          "Signal interpreted: " + signal;
+      }
     }
   </script>
 
