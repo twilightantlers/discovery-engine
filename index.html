@@ -1,266 +1,291 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-<meta charset="UTF-8">
+
+<title>Arcane AI</title>
+
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>The Great Beyond</title>
-
 <style>
+
 *{
-  margin:0;
-  padding:0;
-  box-sizing:border-box;
+margin:0;
+padding:0;
+box-sizing:border-box;
 }
 
 body{
-  min-height:100vh;
-  background:#03030a;
-  color:white;
-  font-family:Arial, sans-serif;
-  overflow-x:hidden;
+background:
+radial-gradient(circle at top,#1d0f42,#03030a 70%);
+color:white;
+font-family:Arial,sans-serif;
+min-height:100vh;
+padding:20px;
+overflow-x:hidden;
 }
 
-body::before{
-  content:"";
-  position:fixed;
-  inset:0;
-  background:
-    radial-gradient(circle at 20% 20%, #7b2cff55, transparent 30%),
-    radial-gradient(circle at 80% 30%, #00eaff44, transparent 30%),
-    radial-gradient(circle at 50% 90%, #ff2fd655, transparent 35%),
-    linear-gradient(180deg,#050514,#000);
-  z-index:-3;
+h1{
+text-align:center;
+font-size:3rem;
+margin-bottom:25px;
+text-shadow:0 0 20px #7b2cff;
 }
 
-body::after{
-  content:"";
-  position:fixed;
-  inset:0;
-  background-image:
-    linear-gradient(rgba(255,255,255,.03) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255,255,255,.03) 1px, transparent 1px);
-  background-size:40px 40px;
-  z-index:-2;
-  animation:gridMove 10s linear infinite;
+.container{
+max-width:1000px;
+margin:auto;
+display:grid;
+grid-template-columns:
+repeat(auto-fit,minmax(320px,1fr));
+gap:20px;
 }
 
-@keyframes gridMove{
-  from{background-position:0 0;}
-  to{background-position:40px 40px;}
+.box{
+background:rgba(255,255,255,.08);
+border:1px solid rgba(255,255,255,.12);
+border-radius:24px;
+padding:22px;
+backdrop-filter:blur(12px);
+box-shadow:0 0 25px rgba(0,0,0,.4);
 }
 
-header{
-  text-align:center;
-  padding:70px 20px 30px;
+.box h2{
+margin-bottom:14px;
 }
 
-.logo{
-  font-size:3.7rem;
-  letter-spacing:4px;
-  text-shadow:0 0 25px #7b2cff;
+.box p{
+color:#ccc;
+line-height:1.6;
+margin-bottom:14px;
 }
 
-.subtitle{
-  color:#ccc;
-  margin-top:12px;
-  font-size:1.1rem;
+textarea,input{
+width:100%;
+padding:15px;
+border:none;
+border-radius:14px;
+background:#0b0b17;
+color:white;
+margin-bottom:12px;
+font-size:1rem;
 }
 
-.main{
-  width:92%;
-  max-width:1200px;
-  margin:auto;
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(310px,1fr));
-  gap:25px;
-  padding:30px 0 80px;
-}
-
-.portal{
-  position:relative;
-  background:rgba(255,255,255,.07);
-  border:1px solid rgba(255,255,255,.14);
-  border-radius:28px;
-  padding:24px;
-  backdrop-filter:blur(16px);
-  box-shadow:0 0 35px rgba(0,0,0,.45);
-  overflow:hidden;
-}
-
-.portal::before{
-  content:"";
-  position:absolute;
-  inset:-2px;
-  background:linear-gradient(120deg,#7b2cff,#00eaff,#ff2fd6,#7b2cff);
-  opacity:.25;
-  z-index:-1;
-  filter:blur(20px);
-}
-
-.portal h2{
-  font-size:2rem;
-  margin-bottom:10px;
-}
-
-.portal p{
-  color:#cfcfcf;
-  line-height:1.6;
-  margin-bottom:16px;
-}
-
-.portal img{
-  width:100%;
-  height:230px;
-  object-fit:cover;
-  border-radius:20px;
-  border:1px solid rgba(255,255,255,.15);
-  margin-bottom:15px;
-}
-
-input{
-  width:100%;
-  padding:15px;
-  border:none;
-  border-radius:15px;
-  background:#090912;
-  color:white;
-  font-size:1rem;
-  outline:none;
-  margin-bottom:12px;
+textarea{
+height:140px;
+resize:none;
 }
 
 button{
-  width:100%;
-  padding:15px;
-  border:none;
-  border-radius:16px;
-  color:white;
-  font-weight:bold;
-  font-size:1rem;
-  background:linear-gradient(45deg,#7b2cff,#00eaff);
-  cursor:pointer;
-  box-shadow:0 0 20px rgba(123,44,255,.45);
+width:100%;
+padding:15px;
+border:none;
+border-radius:14px;
+font-size:1rem;
+font-weight:bold;
+cursor:pointer;
+color:white;
+background:
+linear-gradient(45deg,#7b2cff,#00d4ff);
+box-shadow:
+0 0 20px rgba(123,44,255,.5);
 }
 
-button:active{
-  transform:scale(.98);
+.output{
+margin-top:14px;
+padding:15px;
+border-radius:14px;
+background:#05050d;
+white-space:pre-wrap;
+line-height:1.6;
+}
+
+img{
+width:100%;
+border-radius:18px;
+margin-top:14px;
 }
 
 .status{
-  margin-top:12px;
-  padding:12px;
-  border-radius:14px;
-  background:rgba(0,0,0,.35);
-  color:#9ffcff;
-  font-size:.95rem;
+margin-top:10px;
+font-size:.9rem;
+color:#8efcff;
 }
 
-footer{
-  text-align:center;
-  color:#888;
-  padding:30px;
-}
 </style>
 </head>
 
 <body>
 
-<header>
-  <h1 class="logo">THE GREAT BEYOND</h1>
-  <p class="subtitle">SAFE_MODE ∞ Discovery Engine Loaded</p>
-</header>
+<h1>🧠 Arcane AI</h1>
 
-<section class="main">
+<div class="container">
 
-  <div class="portal">
-    <h2>✨ Aesthetic Portal</h2>
-    <p>
-      The beauty layer. Dreams, color, atmosphere,
-      imagination, peace, and glowing world energy.
-    </p>
+<div class="box">
 
-    <img 
-      src="https://media.giphy.com/media/26ufdipQqU2lhNA4g/giphy.gif" 
-      alt="aesthetic portal"
-    >
+<h2>💬 AI Chat</h2>
 
-    <button onclick="enterAesthetic()">ENTER AESTHETIC</button>
+<p>
+Talk to Arcane AI and solve problems,
+brainstorm ideas, learn things,
+or build projects.
+</p>
 
-    <div id="aestheticStatus" class="status">
-      ✨ Aesthetic layer is standing by...
-    </div>
-  </div>
+<textarea
+id="chatInput"
+placeholder="Talk to Arcane AI..."
+></textarea>
 
-  <div class="portal">
-    <h2>🌀 GIF Portal</h2>
-    <p>
-      Type any chaotic signal. The portal catches it
-      and turns it into a discovered visual frequency.
-    </p>
+<button onclick="sendChat()">
+ASK ARCANE
+</button>
 
-    <img
-      id="portalGif"
-      src="https://media.giphy.com/media/3o7aD2saalBwwftBIY/giphy.gif"
-      alt="gif portal"
-    >
+<div
+id="chatOutput"
+class="output"
+>
+Arcane AI ready...
+</div>
 
-    <input
-      id="gifInput"
-      placeholder="Type chaotic signal here..."
-    >
+<div class="status">
+ONLINE ∞ SAFE_MODE ACTIVE
+</div>
 
-    <button onclick="discoverGif()">DISCOVER</button>
+</div>
 
-    <div id="gifStatus" class="status">
-      🌀 Portal loaded. Waiting for signal...
-    </div>
-  </div>
+<div class="box">
 
-</section>
+<h2>🎨 AI Image Generator</h2>
 
-<footer>
-  THE GREAT BEYOND ∞ SAFE_MODE ACTIVE
-</footer>
+<p>
+Describe any image and Arcane AI
+will generate it.
+</p>
+
+<input
+id="imageInput"
+placeholder="Describe your image..."
+>
+
+<button onclick="makeImage()">
+CREATE IMAGE
+</button>
+
+<div
+id="imageOutput"
+class="output"
+>
+Image system ready...
+</div>
+
+</div>
+
+</div>
 
 <script>
-const gifs = [
-  "https://media.giphy.com/media/3o7aD2saalBwwftBIY/giphy.gif",
-  "https://media.giphy.com/media/l0HlBO7eyXzSZkJri/giphy.gif",
-  "https://media.giphy.com/media/xTiTnxpQ3ghPiB2Hp6/giphy.gif",
-  "https://media.giphy.com/media/ICOgUNjpvO0PC/giphy.gif",
-  "https://media.giphy.com/media/13HgwGsXF0aiGY/giphy.gif",
-  "https://media.giphy.com/media/f9k1tV7HyORcngKF8v/giphy.gif",
-  "https://media.giphy.com/media/26BRuo6sLetdllPAQ/giphy.gif",
-  "https://media.giphy.com/media/10SvWCbt1ytWCc/giphy.gif"
-];
 
-const messages = [
-  "Signal caught.",
-  "Chaos became motion.",
-  "Discovery unlocked.",
-  "The portal answered.",
-  "Visual frequency found.",
-  "The Great Beyond heard you."
-];
+async function sendChat(){
 
-function discoverGif(){
-  const input = document.getElementById("gifInput").value.trim();
-  const gif = gifs[Math.floor(Math.random() * gifs.length)];
-  const msg = messages[Math.floor(Math.random() * messages.length)];
+const message =
+document.getElementById(
+"chatInput"
+).value;
 
-  document.getElementById("portalGif").src = gif;
+const output =
+document.getElementById(
+"chatOutput"
+);
 
-  document.getElementById("gifStatus").innerText =
-    input
-    ? "🌀 " + msg + " Signal: " + input
-    : "🌀 " + msg + " Empty signal still discovered.";
+output.innerText =
+"Arcane AI thinking...";
+
+try{
+
+const res =
+await fetch("/chat",{
+
+method:"POST",
+
+headers:{
+"Content-Type":"application/json"
+},
+
+body:JSON.stringify({
+message
+})
+
+});
+
+const data =
+await res.json();
+
+output.innerText =
+data.reply || data.error;
+
+}catch(err){
+
+output.innerText =
+"Connection failed.";
+
 }
 
-function enterAesthetic(){
-  document.getElementById("aestheticStatus").innerText =
-    "✨ Aesthetic Portal opened. Dream layer active.";
 }
+
+async function makeImage(){
+
+const prompt =
+document.getElementById(
+"imageInput"
+).value;
+
+const output =
+document.getElementById(
+"imageOutput"
+);
+
+output.innerText =
+"Generating image...";
+
+try{
+
+const res =
+await fetch("/image",{
+
+method:"POST",
+
+headers:{
+"Content-Type":"application/json"
+},
+
+body:JSON.stringify({
+prompt
+})
+
+});
+
+const data =
+await res.json();
+
+if(data.image){
+
+output.innerHTML =
+`<img src="data:image/png;base64,${data.image}">`;
+
+}else{
+
+output.innerText =
+data.error;
+
+}
+
+}catch(err){
+
+output.innerText =
+"Image connection failed.";
+
+}
+
+}
+
 </script>
 
 </body>
