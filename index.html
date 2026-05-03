@@ -2,49 +2,81 @@
 <html>
 <head>
   <title>The Great Beyond</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   <style>
+    * { box-sizing: border-box; }
+
     body {
-      background: #0b1020;
+      margin: 0;
+      min-height: 100vh;
+      background: radial-gradient(circle at top, #243066, #080b18);
       color: white;
-      font-family: Arial;
+      font-family: Arial, sans-serif;
       text-align: center;
-      padding: 60px 20px;
+      padding: 40px 18px;
       transition: 0.8s;
     }
 
     h1 {
       font-size: 42px;
+      margin-bottom: 8px;
     }
 
-    p {
-      color: #b8c0ff;
+    .subtitle {
+      color: #c8ceff;
+      margin-bottom: 30px;
     }
 
     .portal {
-      margin: 30px auto;
-      padding: 25px;
-      border: 1px solid #6f7cff;
-      border-radius: 25px;
-      max-width: 420px;
-      box-shadow: 0 0 25px #6f7cff;
+      max-width: 520px;
+      margin: auto;
+      padding: 24px;
+      border-radius: 28px;
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.25);
+      box-shadow: 0 0 35px rgba(150,160,255,0.45);
+      backdrop-filter: blur(10px);
     }
 
     input {
-      padding: 12px;
-      width: 80%;
-      border-radius: 15px;
+      width: 100%;
+      padding: 15px;
+      border-radius: 18px;
       border: none;
-      margin-bottom: 15px;
       text-align: center;
+      font-size: 16px;
+      margin-bottom: 14px;
+      outline: none;
+      background: rgba(255,255,255,0.95);
     }
 
     button {
-      padding: 10px 18px;
-      border-radius: 15px;
+      padding: 12px 18px;
+      border-radius: 18px;
       border: none;
       cursor: pointer;
-      margin: 5px;
+      margin: 6px;
+      font-weight: bold;
+    }
+
+    .primary {
+      background: #dfe3ff;
+    }
+
+    .secondary {
+      background: #b9c0ff;
+    }
+
+    #result {
+      color: #d7dcff;
+      font-size: 18px;
+      margin-top: 18px;
+    }
+
+    #portalName {
+      margin-top: 18px;
+      font-size: 22px;
     }
 
     .cards {
@@ -54,21 +86,48 @@
     }
 
     .card {
-      background: rgba(255,255,255,0.08);
+      background: rgba(255,255,255,0.10);
       padding: 15px;
-      border-radius: 18px;
-      border: 1px solid rgba(255,255,255,0.2);
+      border-radius: 20px;
+      border: 1px solid rgba(255,255,255,0.20);
+      text-align: left;
+    }
+
+    .card strong {
+      display: block;
+      margin-bottom: 6px;
+      color: #ffffff;
     }
 
     a {
-      color: #d7dcff;
-      text-decoration: none;
+      color: #ffffff;
+      text-decoration: underline;
+    }
+
+    .tag {
+      display: inline-block;
+      margin: 4px;
+      padding: 6px 10px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.14);
+      font-size: 13px;
     }
 
     .log {
+      margin-top: 20px;
       font-size: 14px;
       color: #cfd3ff;
-      margin-top: 20px;
+      word-wrap: break-word;
+    }
+
+    .pulse {
+      animation: pulse 1.6s infinite;
+    }
+
+    @keyframes pulse {
+      0% { transform: scale(1); opacity: 0.75; }
+      50% { transform: scale(1.04); opacity: 1; }
+      100% { transform: scale(1); opacity: 0.75; }
     }
   </style>
 </head>
@@ -77,113 +136,318 @@
 
   <h1>The Great Beyond</h1>
 
-  <p>A living discovery engine where chaos becomes signal.</p>
+  <p class="subtitle">
+    A living discovery engine where chaos becomes signal.
+  </p>
 
   <div class="portal">
-    <input id="signal" placeholder="Type a signal..." />
 
-    <br>
+    <input
+      id="signal"
+      placeholder="Type any signal..."
+    />
 
-    <button onclick="discover()">Discover</button>
-    <button onclick="randomSignal()">Random Signal</button>
+    <button
+      class="primary"
+      onclick="discover()">
+      Discover
+    </button>
 
-    <p id="result">Signal awaiting interpretation...</p>
+    <button
+      class="secondary"
+      onclick="clearEngine()">
+      Clear
+    </button>
 
-    <h3 id="portalName">Portal sleeping...</h3>
+    <p id="result">
+      Signal awaiting interpretation...
+    </p>
+
+    <h2 id="portalName">
+      Portal sleeping...
+    </h2>
+
+    <div id="tags"></div>
 
     <div class="cards" id="cards"></div>
 
-    <div class="log" id="log">Memory Log: empty</div>
+    <div class="log" id="log">
+      Memory Log: empty
+    </div>
+
   </div>
 
   <script>
+
     let memory = [];
 
+    const worlds = [
+      {
+        keys: ["moon", "night", "stars", "sleep"],
+        name: "Moon Garden",
+        emoji: "🌙",
+        color:
+          "radial-gradient(circle at top, #2d3b78, #080b18)",
+        mood:
+          "soft, quiet, glowing, peaceful"
+      },
+
+      {
+        keys: ["dream", "magic", "wonder", "fantasy"],
+        name: "Dream Forest",
+        emoji: "✨",
+        color:
+          "radial-gradient(circle at top, #4d2d78, #090718)",
+        mood:
+          "mystical, imaginative, floating"
+      },
+
+      {
+        keys: ["rain", "storm", "water", "blue"],
+        name: "Neon Rain District",
+        emoji: "☔",
+        color:
+          "radial-gradient(circle at top, #17435c, #071118)",
+        mood:
+          "calm, rainy, emotional, cyber"
+      },
+
+      {
+        keys: ["fire", "ember", "lava", "heat"],
+        name: "Ember Cave",
+        emoji: "🔥",
+        color:
+          "radial-gradient(circle at top, #5c1f1f, #160707)",
+        mood:
+          "powerful, warm, intense"
+      },
+
+      {
+        keys: ["cute", "soft", "cozy", "kawaii"],
+        name: "Cute Cloud Village",
+        emoji: "🧸",
+        color:
+          "radial-gradient(circle at top, #6b3f75, #15091a)",
+        mood:
+          "gentle, adorable, pastel, safe"
+      },
+
+      {
+        keys: ["space", "galaxy", "planet", "alien"],
+        name: "Star Internet Sea",
+        emoji: "🚀",
+        color:
+          "radial-gradient(circle at top, #15154d, #02020d)",
+        mood:
+          "cosmic, huge, mysterious"
+      }
+    ];
+
     function discover() {
-      const signal = document.getElementById("signal").value.toLowerCase();
-      const result = document.getElementById("result");
-      const portalName = document.getElementById("portalName");
-      const cards = document.getElementById("cards");
-      const log = document.getElementById("log");
+
+      const input =
+        document.getElementById("signal");
+
+      const rawSignal =
+        input.value.trim();
+
+      const signal =
+        rawSignal.toLowerCase();
+
+      const result =
+        document.getElementById("result");
+
+      const portalName =
+        document.getElementById("portalName");
+
+      const cards =
+        document.getElementById("cards");
+
+      const log =
+        document.getElementById("log");
+
+      const tags =
+        document.getElementById("tags");
 
       if (!signal) {
-        result.innerText = "Type a signal first 🌌";
+        result.innerText =
+          "Type a signal first 🌌";
         return;
       }
 
-      memory.push(signal);
-      log.innerText = "Memory Log: " + memory.join(" → ");
+      memory.unshift(rawSignal);
 
-      let path = "Unknown Signal Path";
-      let emoji = "✨";
-      let background = "#0b1020";
+      memory = memory.slice(0, 6);
 
-      if (signal.includes("moon")) {
-        path = "Moon Garden";
-        emoji = "🌙";
-        background = "#111936";
-      } 
-      else if (signal.includes("dream")) {
-        path = "Dream Forest";
-        emoji = "💫";
-        background = "#1b1438";
-      } 
-      else if (signal.includes("rain")) {
-        path = "Neon Rain District";
-        emoji = "☔";
-        background = "#102836";
-      } 
-      else if (signal.includes("fire")) {
-        path = "Ember Cave";
-        emoji = "🔥";
-        background = "#351414";
-      } 
-      else if (signal.includes("cute")) {
-        path = "Cute Cloud Village";
-        emoji = "🧸";
-        background = "#2b1b36";
-      } 
-      else if (signal.includes("space")) {
-        path = "Star Internet Sea";
-        emoji = "🚀";
-        background = "#050518";
+      let chosen = worlds.find(world =>
+        world.keys.some(key =>
+          signal.includes(key)
+        )
+      );
+
+      let detectedMood =
+        "chaotic unknown signal";
+
+      if (!chosen) {
+
+        if (
+          signal.length > 15 ||
+          /[^a-zA-Z0-9 ]/.test(signal)
+        ) {
+
+          chosen = {
+            name: "Chaos Stream",
+            emoji: "🌀",
+            color:
+              "radial-gradient(circle at top, #32204f, #080b18)",
+            mood:
+              "experimental, unstable, alive"
+          };
+
+          detectedMood =
+            "compressed symbolic rhythm";
+        }
+
+        else {
+
+          chosen = {
+            name: "Unknown Signal Path",
+            emoji: "✨",
+            color:
+              "radial-gradient(circle at top, #26304f, #080b18)",
+            mood:
+              "mysterious, emotional, undecoded"
+          };
+
+          detectedMood =
+            "soft unidentified pathway";
+        }
       }
 
-      document.body.style.background = background;
+      document.body.style.background =
+        chosen.color;
 
-      result.innerText = "Signal interpreted: " + signal + " " + emoji;
-      portalName.innerText = "Portal Opened: " + path;
+      result.innerText =
+        chosen.emoji +
+        " Signal interpreted: " +
+        rawSignal;
+
+      portalName.innerText =
+        "Portal Opened: " +
+        chosen.name;
+
+      portalName.classList.add("pulse");
+
+      tags.innerHTML = `
+        <span class="tag">
+          Mood: ${chosen.mood}
+        </span>
+
+        <span class="tag">
+          Pattern: ${detectedMood}
+        </span>
+
+        <span class="tag">
+          Signal Length: ${rawSignal.length}
+        </span>
+      `;
+
+      const imageSearch =
+        encodeURIComponent(rawSignal + " aesthetic");
+
+      const webSearch =
+        encodeURIComponent(rawSignal);
+
+      const videoSearch =
+        encodeURIComponent(rawSignal + " ambient");
+
+      const pinterestSearch =
+        encodeURIComponent(rawSignal + " mood");
 
       cards.innerHTML = `
-        <div class="card">🖼️ Image World: ${path} visuals</div>
-        <div class="card">🌐 Website Portal: Explore sites about "${signal}"</div>
-        <div class="card">🎵 Music Space: Sounds matching "${signal}"</div>
-        <div class="card">👥 Community Path: People who like "${signal}"</div>
         <div class="card">
-          🔎 Search Links:<br><br>
-          <a target="_blank" href="https://www.google.com/search?tbm=isch&q=${signal}">Find Pictures</a><br>
-          <a target="_blank" href="https://www.google.com/search?q=${signal}">Find Websites</a><br>
-          <a target="_blank" href="https://www.youtube.com/results?search_query=${signal}">Find Videos</a>
+          <strong>🖼️ Image World</strong>
+
+          Discovery visuals generated from:
+          <em>${rawSignal}</em>
+
+          <br><br>
+
+          <a target="_blank"
+          href="https://www.google.com/search?tbm=isch&q=${imageSearch}">
+          Open picture search
+          </a>
+        </div>
+
+        <div class="card">
+          <strong>🌐 Website Portal</strong>
+
+          Signal-based web discovery path.
+
+          <br><br>
+
+          <a target="_blank"
+          href="https://www.google.com/search?q=${webSearch}">
+          Open website search
+          </a>
+        </div>
+
+        <div class="card">
+          <strong>🎵 Sound Path</strong>
+
+          Atmosphere and rhythm discovery.
+
+          <br><br>
+
+          <a target="_blank"
+          href="https://www.youtube.com/results?search_query=${videoSearch}">
+          Open video search
+          </a>
+        </div>
+
+        <div class="card">
+          <strong>🌌 Aesthetic Portal</strong>
+
+          Moodboard exploration layer.
+
+          <br><br>
+
+          <a target="_blank"
+          href="https://www.pinterest.com/search/pins/?q=${pinterestSearch}">
+          Open aesthetic search
+          </a>
         </div>
       `;
+
+      log.innerText =
+        "Memory Log: " +
+        memory.join(" → ");
     }
 
-    function randomSignal() {
-      const signals = [
-        "cute moon garden",
-        "dream forest",
-        "neon rain",
-        "space music",
-        "fire cave",
-        "soft internet world"
-      ];
+    function clearEngine() {
 
-      const random = signals[Math.floor(Math.random() * signals.length)];
+      document.getElementById("signal").value =
+        "";
 
-      document.getElementById("signal").value = random;
+      document.getElementById("result").innerText =
+        "Signal awaiting interpretation...";
 
-      discover();
+      document.getElementById("portalName").innerText =
+        "Portal sleeping...";
+
+      document.getElementById("cards").innerHTML =
+        "";
+
+      document.getElementById("tags").innerHTML =
+        "";
+
+      document.getElementById("log").innerText =
+        "Memory Log: empty";
+
+      document.body.style.background =
+        "radial-gradient(circle at top, #243066, #080b18)";
     }
+
   </script>
 
 </body>
