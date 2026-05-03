@@ -12,44 +12,98 @@ const client = new OpenAI({
 });
 
 app.use(cors());
-app.use(express.json({ limit: "10mb" }));
+app.use(express.json());
+
 app.use(express.static("."));
 
 app.get("/", (req, res) => {
-  res.sendFile("index.html", { root: "." });
+  res.sendFile("index.html", {
+    root: "."
+  });
 });
 
 app.post("/chat", async (req, res) => {
+
   try {
-    const response = await client.responses.create({
-      model: "gpt-5.5",
-      instructions:
-        "You are Arcane AI, a futuristic assistant that solves problems, explains clearly, helps creatively, and stays safe.",
-      input: req.body.message
+
+    const completion =
+      await client.chat.completions.create({
+
+      model: "gpt-4o-mini",
+
+      messages: [
+        {
+          role: "system",
+          content:
+          "You are Arcane AI, a futuristic helpful assistant."
+        },
+
+        {
+          role: "user",
+          content: req.body.message
+        }
+      ]
+
     });
 
-    res.json({ reply: response.output_text });
-  } catch (err) {
-    res.status(500).json({ error: "Arcane AI chat failed." });
+    res.json({
+      reply:
+      completion.choices[0].message.content
+    });
+
+  } catch(err){
+
+    console.log(err);
+
+    res.status(500).json({
+      error:
+      "Arcane AI chat failed."
+    });
+
   }
+
 });
 
 app.post("/image", async (req, res) => {
+
   try {
-    const image = await client.images.generate({
-      model: "gpt-image-2",
+
+    const image =
+      await client.images.generate({
+
+      model: "gpt-image-1",
+
       prompt: req.body.prompt,
+
       size: "1024x1024"
+
     });
 
-    res.json({ image: image.data[0].b64_json });
-  } catch (err) {
-    res.status(500).json({ error: "Arcane AI image failed." });
+    res.json({
+      image:
+      image.data[0].b64_json
+    });
+
+  } catch(err){
+
+    console.log(err);
+
+    res.status(500).json({
+      error:
+      "Arcane AI image failed."
+    });
+
   }
+
 });
 
-const PORT = process.env.PORT || 3000;
+const PORT =
+process.env.PORT || 3000;
 
 app.listen(PORT, () => {
-  console.log("Arcane AI Online");
+
+  console.log(
+    "Arcane AI Online"
+  );
+
 });
