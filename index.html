@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html>
+
 <head>
   <title>The Great Beyond</title>
 
@@ -30,6 +31,21 @@
       margin-left: auto;
       margin-right: auto;
     }
+
+    input {
+      padding: 10px;
+      width: 80%;
+      border-radius: 10px;
+      border: none;
+      margin-bottom: 15px;
+    }
+
+    button {
+      padding: 10px 20px;
+      border-radius: 10px;
+      border: none;
+      cursor: pointer;
+    }
   </style>
 </head>
 
@@ -42,17 +58,28 @@
   </p>
 
   <div class="portal">
+
     <input placeholder="Type a signal..." />
 
-<button><button onclick="discover()">Discover</button></button>
-<script>
-  function discover() {
-    const result = document.getElementById("result");
-    result.innerText = "Signal detected. Opening discovery path...";
-  }
-</script>
-<p><p id="result">Signal awaiting interpretation...</p></p>
+    <br><br>
+
+    <button onclick="discover()">Discover</button>
+
+    <p id="result">
+      Signal awaiting interpretation...
+    </p>
+
   </div>
 
+  <script>
+    function discover() {
+      const result = document.getElementById("result");
+
+      result.innerText =
+        "Signal detected. Opening discovery path...";
+    }
+  </script>
+
 </body>
+
 </html>
