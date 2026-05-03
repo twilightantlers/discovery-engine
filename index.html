@@ -45,8 +45,13 @@
     <input placeholder="Type a signal..." />
 
 <button><button onclick="discover()">Discover</button></button>
-
-<p>Signal awaiting interpretation...</p>
+<script>
+  function discover() {
+    const result = document.getElementById("result");
+    result.innerText = "Signal detected. Opening discovery path...";
+  }
+</script>
+<p><p id="result">Signal awaiting interpretation...</p></p>
   </div>
 
 </body>
