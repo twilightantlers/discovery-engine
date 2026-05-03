@@ -1,454 +1,267 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>The Great Beyond</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <style>
-    * { box-sizing: border-box; }
+<title>The Great Beyond</title>
 
-    body {
-      margin: 0;
-      min-height: 100vh;
-      background: radial-gradient(circle at top, #243066, #080b18);
-      color: white;
-      font-family: Arial, sans-serif;
-      text-align: center;
-      padding: 40px 18px;
-      transition: 0.8s;
-    }
+<style>
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+}
 
-    h1 {
-      font-size: 42px;
-      margin-bottom: 8px;
-    }
+body{
+  min-height:100vh;
+  background:#03030a;
+  color:white;
+  font-family:Arial, sans-serif;
+  overflow-x:hidden;
+}
 
-    .subtitle {
-      color: #c8ceff;
-      margin-bottom: 30px;
-    }
+body::before{
+  content:"";
+  position:fixed;
+  inset:0;
+  background:
+    radial-gradient(circle at 20% 20%, #7b2cff55, transparent 30%),
+    radial-gradient(circle at 80% 30%, #00eaff44, transparent 30%),
+    radial-gradient(circle at 50% 90%, #ff2fd655, transparent 35%),
+    linear-gradient(180deg,#050514,#000);
+  z-index:-3;
+}
 
-    .portal {
-      max-width: 520px;
-      margin: auto;
-      padding: 24px;
-      border-radius: 28px;
-      background: rgba(255,255,255,0.08);
-      border: 1px solid rgba(255,255,255,0.25);
-      box-shadow: 0 0 35px rgba(150,160,255,0.45);
-      backdrop-filter: blur(10px);
-    }
+body::after{
+  content:"";
+  position:fixed;
+  inset:0;
+  background-image:
+    linear-gradient(rgba(255,255,255,.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,.03) 1px, transparent 1px);
+  background-size:40px 40px;
+  z-index:-2;
+  animation:gridMove 10s linear infinite;
+}
 
-    input {
-      width: 100%;
-      padding: 15px;
-      border-radius: 18px;
-      border: none;
-      text-align: center;
-      font-size: 16px;
-      margin-bottom: 14px;
-      outline: none;
-      background: rgba(255,255,255,0.95);
-    }
+@keyframes gridMove{
+  from{background-position:0 0;}
+  to{background-position:40px 40px;}
+}
 
-    button {
-      padding: 12px 18px;
-      border-radius: 18px;
-      border: none;
-      cursor: pointer;
-      margin: 6px;
-      font-weight: bold;
-    }
+header{
+  text-align:center;
+  padding:70px 20px 30px;
+}
 
-    .primary {
-      background: #dfe3ff;
-    }
+.logo{
+  font-size:3.7rem;
+  letter-spacing:4px;
+  text-shadow:0 0 25px #7b2cff;
+}
 
-    .secondary {
-      background: #b9c0ff;
-    }
+.subtitle{
+  color:#ccc;
+  margin-top:12px;
+  font-size:1.1rem;
+}
 
-    #result {
-      color: #d7dcff;
-      font-size: 18px;
-      margin-top: 18px;
-    }
+.main{
+  width:92%;
+  max-width:1200px;
+  margin:auto;
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(310px,1fr));
+  gap:25px;
+  padding:30px 0 80px;
+}
 
-    #portalName {
-      margin-top: 18px;
-      font-size: 22px;
-    }
+.portal{
+  position:relative;
+  background:rgba(255,255,255,.07);
+  border:1px solid rgba(255,255,255,.14);
+  border-radius:28px;
+  padding:24px;
+  backdrop-filter:blur(16px);
+  box-shadow:0 0 35px rgba(0,0,0,.45);
+  overflow:hidden;
+}
 
-    .cards {
-      display: grid;
-      gap: 12px;
-      margin-top: 20px;
-    }
+.portal::before{
+  content:"";
+  position:absolute;
+  inset:-2px;
+  background:linear-gradient(120deg,#7b2cff,#00eaff,#ff2fd6,#7b2cff);
+  opacity:.25;
+  z-index:-1;
+  filter:blur(20px);
+}
 
-    .card {
-      background: rgba(255,255,255,0.10);
-      padding: 15px;
-      border-radius: 20px;
-      border: 1px solid rgba(255,255,255,0.20);
-      text-align: left;
-    }
+.portal h2{
+  font-size:2rem;
+  margin-bottom:10px;
+}
 
-    .card strong {
-      display: block;
-      margin-bottom: 6px;
-      color: #ffffff;
-    }
+.portal p{
+  color:#cfcfcf;
+  line-height:1.6;
+  margin-bottom:16px;
+}
 
-    a {
-      color: #ffffff;
-      text-decoration: underline;
-    }
+.portal img{
+  width:100%;
+  height:230px;
+  object-fit:cover;
+  border-radius:20px;
+  border:1px solid rgba(255,255,255,.15);
+  margin-bottom:15px;
+}
 
-    .tag {
-      display: inline-block;
-      margin: 4px;
-      padding: 6px 10px;
-      border-radius: 999px;
-      background: rgba(255,255,255,0.14);
-      font-size: 13px;
-    }
+input{
+  width:100%;
+  padding:15px;
+  border:none;
+  border-radius:15px;
+  background:#090912;
+  color:white;
+  font-size:1rem;
+  outline:none;
+  margin-bottom:12px;
+}
 
-    .log {
-      margin-top: 20px;
-      font-size: 14px;
-      color: #cfd3ff;
-      word-wrap: break-word;
-    }
+button{
+  width:100%;
+  padding:15px;
+  border:none;
+  border-radius:16px;
+  color:white;
+  font-weight:bold;
+  font-size:1rem;
+  background:linear-gradient(45deg,#7b2cff,#00eaff);
+  cursor:pointer;
+  box-shadow:0 0 20px rgba(123,44,255,.45);
+}
 
-    .pulse {
-      animation: pulse 1.6s infinite;
-    }
+button:active{
+  transform:scale(.98);
+}
 
-    @keyframes pulse {
-      0% { transform: scale(1); opacity: 0.75; }
-      50% { transform: scale(1.04); opacity: 1; }
-      100% { transform: scale(1); opacity: 0.75; }
-    }
-  </style>
+.status{
+  margin-top:12px;
+  padding:12px;
+  border-radius:14px;
+  background:rgba(0,0,0,.35);
+  color:#9ffcff;
+  font-size:.95rem;
+}
+
+footer{
+  text-align:center;
+  color:#888;
+  padding:30px;
+}
+</style>
 </head>
 
 <body>
 
-  <h1>The Great Beyond</h1>
+<header>
+  <h1 class="logo">THE GREAT BEYOND</h1>
+  <p class="subtitle">SAFE_MODE ∞ Discovery Engine Loaded</p>
+</header>
 
-  <p class="subtitle">
-    A living discovery engine where chaos becomes signal.
-  </p>
+<section class="main">
 
   <div class="portal">
-
-    <input
-      id="signal"
-      placeholder="Type any signal..."
-    />
-
-    <button
-      class="primary"
-      onclick="discover()">
-      Discover
-    </button>
-
-    <button
-      class="secondary"
-      onclick="clearEngine()">
-      Clear
-    </button>
-
-    <p id="result">
-      Signal awaiting interpretation...
+    <h2>✨ Aesthetic Portal</h2>
+    <p>
+      The beauty layer. Dreams, color, atmosphere,
+      imagination, peace, and glowing world energy.
     </p>
 
-    <h2 id="portalName">
-      Portal sleeping...
-    </h2>
+    <img 
+      src="https://media.giphy.com/media/26ufdipQqU2lhNA4g/giphy.gif" 
+      alt="aesthetic portal"
+    >
 
-    <div id="tags"></div>
+    <button onclick="enterAesthetic()">ENTER AESTHETIC</button>
 
-    <div class="cards" id="cards"></div>
-
-    <div class="log" id="log">
-      Memory Log: empty
+    <div id="aestheticStatus" class="status">
+      ✨ Aesthetic layer is standing by...
     </div>
-
   </div>
 
-  <script>
-
-    let memory = [];
-
-    const worlds = [
-      {
-        keys: ["moon", "night", "stars", "sleep"],
-        name: "Moon Garden",
-        emoji: "🌙",
-        color:
-          "radial-gradient(circle at top, #2d3b78, #080b18)",
-        mood:
-          "soft, quiet, glowing, peaceful"
-      },
-
-      {
-        keys: ["dream", "magic", "wonder", "fantasy"],
-        name: "Dream Forest",
-        emoji: "✨",
-        color:
-          "radial-gradient(circle at top, #4d2d78, #090718)",
-        mood:
-          "mystical, imaginative, floating"
-      },
-
-      {
-        keys: ["rain", "storm", "water", "blue"],
-        name: "Neon Rain District",
-        emoji: "☔",
-        color:
-          "radial-gradient(circle at top, #17435c, #071118)",
-        mood:
-          "calm, rainy, emotional, cyber"
-      },
-
-      {
-        keys: ["fire", "ember", "lava", "heat"],
-        name: "Ember Cave",
-        emoji: "🔥",
-        color:
-          "radial-gradient(circle at top, #5c1f1f, #160707)",
-        mood:
-          "powerful, warm, intense"
-      },
-
-      {
-        keys: ["cute", "soft", "cozy", "kawaii"],
-        name: "Cute Cloud Village",
-        emoji: "🧸",
-        color:
-          "radial-gradient(circle at top, #6b3f75, #15091a)",
-        mood:
-          "gentle, adorable, pastel, safe"
-      },
-
-      {
-        keys: ["space", "galaxy", "planet", "alien"],
-        name: "Star Internet Sea",
-        emoji: "🚀",
-        color:
-          "radial-gradient(circle at top, #15154d, #02020d)",
-        mood:
-          "cosmic, huge, mysterious"
-      }
-    ];
-
-    function discover() {
-
-      const input =
-        document.getElementById("signal");
-
-      const rawSignal =
-        input.value.trim();
-
-      const signal =
-        rawSignal.toLowerCase();
-
-      const result =
-        document.getElementById("result");
-
-      const portalName =
-        document.getElementById("portalName");
-
-      const cards =
-        document.getElementById("cards");
-
-      const log =
-        document.getElementById("log");
-
-      const tags =
-        document.getElementById("tags");
-
-      if (!signal) {
-        result.innerText =
-          "Type a signal first 🌌";
-        return;
-      }
-
-      memory.unshift(rawSignal);
-
-      memory = memory.slice(0, 6);
-
-      let chosen = worlds.find(world =>
-        world.keys.some(key =>
-          signal.includes(key)
-        )
-      );
-
-      let detectedMood =
-        "chaotic unknown signal";
-
-      if (!chosen) {
-
-        if (
-          signal.length > 15 ||
-          /[^a-zA-Z0-9 ]/.test(signal)
-        ) {
-
-          chosen = {
-            name: "Chaos Stream",
-            emoji: "🌀",
-            color:
-              "radial-gradient(circle at top, #32204f, #080b18)",
-            mood:
-              "experimental, unstable, alive"
-          };
-
-          detectedMood =
-            "compressed symbolic rhythm";
-        }
-
-        else {
-
-          chosen = {
-            name: "Unknown Signal Path",
-            emoji: "✨",
-            color:
-              "radial-gradient(circle at top, #26304f, #080b18)",
-            mood:
-              "mysterious, emotional, undecoded"
-          };
-
-          detectedMood =
-            "soft unidentified pathway";
-        }
-      }
-
-      document.body.style.background =
-        chosen.color;
-
-      result.innerText =
-        chosen.emoji +
-        " Signal interpreted: " +
-        rawSignal;
-
-      portalName.innerText =
-        "Portal Opened: " +
-        chosen.name;
-
-      portalName.classList.add("pulse");
-
-      tags.innerHTML = `
-        <span class="tag">
-          Mood: ${chosen.mood}
-        </span>
-
-        <span class="tag">
-          Pattern: ${detectedMood}
-        </span>
-
-        <span class="tag">
-          Signal Length: ${rawSignal.length}
-        </span>
-      `;
-
-      const imageSearch =
-        encodeURIComponent(rawSignal + " aesthetic");
-
-      const webSearch =
-        encodeURIComponent(rawSignal);
-
-      const videoSearch =
-        encodeURIComponent(rawSignal + " ambient");
-
-      const pinterestSearch =
-        encodeURIComponent(rawSignal + " mood");
-
-      cards.innerHTML = `
-        <div class="card">
-          <strong>🖼️ Image World</strong>
-
-          Discovery visuals generated from:
-          <em>${rawSignal}</em>
-
-          <br><br>
-
-          <a target="_blank"
-          href="https://www.google.com/search?tbm=isch&q=${imageSearch}">
-          Open picture search
-          </a>
-        </div>
-
-        <div class="card">
-          <strong>🌐 Website Portal</strong>
-
-          Signal-based web discovery path.
-
-          <br><br>
-
-          <a target="_blank"
-          href="https://www.google.com/search?q=${webSearch}">
-          Open website search
-          </a>
-        </div>
-
-        <div class="card">
-          <strong>🎵 Sound Path</strong>
-
-          Atmosphere and rhythm discovery.
-
-          <br><br>
-
-          <a target="_blank"
-          href="https://www.youtube.com/results?search_query=${videoSearch}">
-          Open video search
-          </a>
-        </div>
-
-        <div class="card">
-          <strong>🌌 Aesthetic Portal</strong>
-
-          Moodboard exploration layer.
-
-          <br><br>
-
-          <a target="_blank"
-          href="https://www.pinterest.com/search/pins/?q=${pinterestSearch}">
-          Open aesthetic search
-          </a>
-        </div>
-      `;
-
-      log.innerText =
-        "Memory Log: " +
-        memory.join(" → ");
-    }
-
-    function clearEngine() {
-
-      document.getElementById("signal").value =
-        "";
-
-      document.getElementById("result").innerText =
-        "Signal awaiting interpretation...";
-
-      document.getElementById("portalName").innerText =
-        "Portal sleeping...";
-
-      document.getElementById("cards").innerHTML =
-        "";
-
-      document.getElementById("tags").innerHTML =
-        "";
-
-      document.getElementById("log").innerText =
-        "Memory Log: empty";
-
-      document.body.style.background =
-        "radial-gradient(circle at top, #243066, #080b18)";
-    }
-
-  </script>
+  <div class="portal">
+    <h2>🌀 GIF Portal</h2>
+    <p>
+      Type any chaotic signal. The portal catches it
+      and turns it into a discovered visual frequency.
+    </p>
+
+    <img
+      id="portalGif"
+      src="https://media.giphy.com/media/3o7aD2saalBwwftBIY/giphy.gif"
+      alt="gif portal"
+    >
+
+    <input
+      id="gifInput"
+      placeholder="Type chaotic signal here..."
+    >
+
+    <button onclick="discoverGif()">DISCOVER</button>
+
+    <div id="gifStatus" class="status">
+      🌀 Portal loaded. Waiting for signal...
+    </div>
+  </div>
+
+</section>
+
+<footer>
+  THE GREAT BEYOND ∞ SAFE_MODE ACTIVE
+</footer>
+
+<script>
+const gifs = [
+  "https://media.giphy.com/media/3o7aD2saalBwwftBIY/giphy.gif",
+  "https://media.giphy.com/media/l0HlBO7eyXzSZkJri/giphy.gif",
+  "https://media.giphy.com/media/xTiTnxpQ3ghPiB2Hp6/giphy.gif",
+  "https://media.giphy.com/media/ICOgUNjpvO0PC/giphy.gif",
+  "https://media.giphy.com/media/13HgwGsXF0aiGY/giphy.gif",
+  "https://media.giphy.com/media/f9k1tV7HyORcngKF8v/giphy.gif",
+  "https://media.giphy.com/media/26BRuo6sLetdllPAQ/giphy.gif",
+  "https://media.giphy.com/media/10SvWCbt1ytWCc/giphy.gif"
+];
+
+const messages = [
+  "Signal caught.",
+  "Chaos became motion.",
+  "Discovery unlocked.",
+  "The portal answered.",
+  "Visual frequency found.",
+  "The Great Beyond heard you."
+];
+
+function discoverGif(){
+  const input = document.getElementById("gifInput").value.trim();
+  const gif = gifs[Math.floor(Math.random() * gifs.length)];
+  const msg = messages[Math.floor(Math.random() * messages.length)];
+
+  document.getElementById("portalGif").src = gif;
+
+  document.getElementById("gifStatus").innerText =
+    input
+    ? "🌀 " + msg + " Signal: " + input
+    : "🌀 " + msg + " Empty signal still discovered.";
+}
+
+function enterAesthetic(){
+  document.getElementById("aestheticStatus").innerText =
+    "✨ Aesthetic Portal opened. Dream layer active.";
+}
+</script>
 
 </body>
 </html>
