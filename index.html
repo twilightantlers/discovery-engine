@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html>
-
 <head>
   <title>The Great Beyond</title>
 
@@ -10,41 +9,66 @@
       color: white;
       font-family: Arial;
       text-align: center;
-      padding-top: 100px;
+      padding: 60px 20px;
+      transition: 0.8s;
     }
 
     h1 {
-      font-size: 50px;
+      font-size: 42px;
     }
 
     p {
-      font-size: 20px;
       color: #b8c0ff;
     }
 
     .portal {
-      margin-top: 40px;
-      padding: 20px;
+      margin: 30px auto;
+      padding: 25px;
       border: 1px solid #6f7cff;
-      border-radius: 20px;
-      width: 300px;
-      margin-left: auto;
-      margin-right: auto;
+      border-radius: 25px;
+      max-width: 420px;
+      box-shadow: 0 0 25px #6f7cff;
     }
 
     input {
-      padding: 10px;
+      padding: 12px;
       width: 80%;
-      border-radius: 10px;
+      border-radius: 15px;
       border: none;
       margin-bottom: 15px;
+      text-align: center;
     }
 
     button {
-      padding: 10px 20px;
-      border-radius: 10px;
+      padding: 10px 18px;
+      border-radius: 15px;
       border: none;
       cursor: pointer;
+      margin: 5px;
+    }
+
+    .cards {
+      display: grid;
+      gap: 12px;
+      margin-top: 20px;
+    }
+
+    .card {
+      background: rgba(255,255,255,0.08);
+      padding: 15px;
+      border-radius: 18px;
+      border: 1px solid rgba(255,255,255,0.2);
+    }
+
+    a {
+      color: #d7dcff;
+      text-decoration: none;
+    }
+
+    .log {
+      font-size: 14px;
+      color: #cfd3ff;
+      margin-top: 20px;
     }
   </style>
 </head>
@@ -53,55 +77,114 @@
 
   <h1>The Great Beyond</h1>
 
-  <p>
-    A living discovery engine where chaos becomes signal.
-  </p>
+  <p>A living discovery engine where chaos becomes signal.</p>
 
   <div class="portal">
-
     <input id="signal" placeholder="Type a signal..." />
 
-    <br><br>
+    <br>
 
     <button onclick="discover()">Discover</button>
+    <button onclick="randomSignal()">Random Signal</button>
 
-    <p id="result">
-      Signal awaiting interpretation...
-    </p>
+    <p id="result">Signal awaiting interpretation...</p>
 
+    <h3 id="portalName">Portal sleeping...</h3>
+
+    <div class="cards" id="cards"></div>
+
+    <div class="log" id="log">Memory Log: empty</div>
   </div>
 
   <script>
+    let memory = [];
+
     function discover() {
+      const signal = document.getElementById("signal").value.toLowerCase();
+      const result = document.getElementById("result");
+      const portalName = document.getElementById("portalName");
+      const cards = document.getElementById("cards");
+      const log = document.getElementById("log");
 
-      const signal =
-        document.getElementById("signal").value;
+      if (!signal) {
+        result.innerText = "Type a signal first 🌌";
+        return;
+      }
 
-      const result =
-        document.getElementById("result");
+      memory.push(signal);
+      log.innerText = "Memory Log: " + memory.join(" → ");
+
+      let path = "Unknown Signal Path";
+      let emoji = "✨";
+      let background = "#0b1020";
 
       if (signal.includes("moon")) {
-        result.innerText =
-          "Night discovery path detected 🌙";
-      }
-
+        path = "Moon Garden";
+        emoji = "🌙";
+        background = "#111936";
+      } 
       else if (signal.includes("dream")) {
-        result.innerText =
-          "Dream world pathway opening ✨";
-      }
-
+        path = "Dream Forest";
+        emoji = "💫";
+        background = "#1b1438";
+      } 
       else if (signal.includes("rain")) {
-        result.innerText =
-          "Rain atmosphere detected ☔";
+        path = "Neon Rain District";
+        emoji = "☔";
+        background = "#102836";
+      } 
+      else if (signal.includes("fire")) {
+        path = "Ember Cave";
+        emoji = "🔥";
+        background = "#351414";
+      } 
+      else if (signal.includes("cute")) {
+        path = "Cute Cloud Village";
+        emoji = "🧸";
+        background = "#2b1b36";
+      } 
+      else if (signal.includes("space")) {
+        path = "Star Internet Sea";
+        emoji = "🚀";
+        background = "#050518";
       }
 
-      else {
-        result.innerText =
-          "Signal interpreted: " + signal;
-      }
+      document.body.style.background = background;
+
+      result.innerText = "Signal interpreted: " + signal + " " + emoji;
+      portalName.innerText = "Portal Opened: " + path;
+
+      cards.innerHTML = `
+        <div class="card">🖼️ Image World: ${path} visuals</div>
+        <div class="card">🌐 Website Portal: Explore sites about "${signal}"</div>
+        <div class="card">🎵 Music Space: Sounds matching "${signal}"</div>
+        <div class="card">👥 Community Path: People who like "${signal}"</div>
+        <div class="card">
+          🔎 Search Links:<br><br>
+          <a target="_blank" href="https://www.google.com/search?tbm=isch&q=${signal}">Find Pictures</a><br>
+          <a target="_blank" href="https://www.google.com/search?q=${signal}">Find Websites</a><br>
+          <a target="_blank" href="https://www.youtube.com/results?search_query=${signal}">Find Videos</a>
+        </div>
+      `;
+    }
+
+    function randomSignal() {
+      const signals = [
+        "cute moon garden",
+        "dream forest",
+        "neon rain",
+        "space music",
+        "fire cave",
+        "soft internet world"
+      ];
+
+      const random = signals[Math.floor(Math.random() * signals.length)];
+
+      document.getElementById("signal").value = random;
+
+      discover();
     }
   </script>
 
 </body>
-
 </html>
