@@ -1,7 +1,6 @@
 {
   "name": "arcane-ai",
   "version": "1.0.0",
-  "description": "Arcane AI",
   "main": "server.js",
   "type": "module",
   "scripts": {
