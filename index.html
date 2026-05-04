@@ -1,195 +1,278 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<title>Arcane AI</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Arcane AI | The Great Beyond</title>
 
-<style>
-*{margin:0;padding:0;box-sizing:border-box}
+  <style>
+    * {
+      box-sizing: border-box;
+    }
 
-body{
-  background:radial-gradient(circle at top,#1d0f42,#03030a 70%);
-  color:white;
-  font-family:Arial,sans-serif;
-  min-height:100vh;
-  padding:20px;
-}
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background:
+        radial-gradient(circle at top, #3b1c72, #080511 60%),
+        linear-gradient(135deg, #12001f, #050014);
+      color: white;
+      min-height: 100vh;
+      padding: 20px;
+    }
 
-h1{
-  text-align:center;
-  font-size:3rem;
-  margin-bottom:25px;
-  text-shadow:0 0 20px #7b2cff;
-}
+    .app {
+      max-width: 760px;
+      margin: auto;
+    }
 
-.container{
-  max-width:1000px;
-  margin:auto;
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(320px,1fr));
-  gap:20px;
-}
+    .hero {
+      text-align: center;
+      padding: 35px 10px;
+    }
 
-.box{
-  background:rgba(255,255,255,.08);
-  border:1px solid rgba(255,255,255,.12);
-  border-radius:24px;
-  padding:22px;
-  box-shadow:0 0 25px rgba(0,0,0,.4);
-}
+    .hero h1 {
+      font-size: 42px;
+      margin: 0;
+    }
 
-p{
-  color:#ccc;
-  line-height:1.5;
-  margin:10px 0;
-}
+    .hero p {
+      color: #cfc8ff;
+      font-size: 18px;
+    }
 
-textarea,input{
-  width:100%;
-  padding:15px;
-  border:none;
-  border-radius:14px;
-  background:#0b0b17;
-  color:white;
-  margin-bottom:12px;
-  font-size:1rem;
-}
+    .card {
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      border-radius: 26px;
+      padding: 24px;
+      margin-bottom: 28px;
+      box-shadow: 0 0 30px rgba(132, 0, 255, 0.2);
+      backdrop-filter: blur(14px);
+    }
 
-textarea{
-  height:140px;
-  resize:none;
-}
+    h2 {
+      font-size: 30px;
+      margin-top: 0;
+    }
 
-button{
-  width:100%;
-  padding:15px;
-  border:none;
-  border-radius:14px;
-  font-size:1rem;
-  font-weight:bold;
-  color:white;
-  background:linear-gradient(45deg,#7b2cff,#00d4ff);
-}
+    textarea,
+    input {
+      width: 100%;
+      background: #070711;
+      color: white;
+      border: none;
+      border-radius: 18px;
+      padding: 18px;
+      font-size: 18px;
+      outline: none;
+      margin: 10px 0 18px;
+    }
 
-.output{
-  margin-top:14px;
-  padding:15px;
-  border-radius:14px;
-  background:#05050d;
-  white-space:pre-wrap;
-  line-height:1.6;
-}
+    textarea {
+      min-height: 150px;
+      resize: vertical;
+    }
 
-img{
-  width:100%;
-  border-radius:18px;
-  margin-top:14px;
-}
-</style>
+    button {
+      width: 100%;
+      border: none;
+      border-radius: 18px;
+      padding: 18px;
+      font-size: 18px;
+      font-weight: bold;
+      color: white;
+      background: linear-gradient(135deg, #8b2cff, #00d4ff);
+      cursor: pointer;
+    }
+
+    button:active {
+      transform: scale(0.98);
+    }
+
+    .output {
+      margin-top: 20px;
+      background: #05050d;
+      border-radius: 18px;
+      padding: 18px;
+      min-height: 70px;
+      white-space: pre-wrap;
+      line-height: 1.5;
+      color: #f4f1ff;
+    }
+
+    img {
+      width: 100%;
+      border-radius: 20px;
+      margin-top: 20px;
+      display: none;
+    }
+
+    .footer {
+      text-align: center;
+      color: #aaa0d6;
+      padding: 30px 0;
+      font-size: 14px;
+    }
+  </style>
 </head>
 
 <body>
+  <div class="app">
+    <section class="hero">
+      <h1>🌌 The Great Beyond</h1>
+      <p>Arcane AI — chat, create images, and discover signals.</p>
+    </section>
 
-<h1>🧠 Arcane AI</h1>
+    <section class="card">
+      <h2>💬 AI Chat</h2>
+      <p>Ask Arcane AI questions, solve problems, or build ideas.</p>
 
-<div class="container">
+      <textarea id="chatInput" placeholder="Type your message..."></textarea>
+      <button onclick="askArcane()">ASK ARCANE</button>
 
-  <div class="box">
-    <h2>💬 AI Chat</h2>
-    <p>Ask Arcane AI questions, solve problems, or build ideas.</p>
+      <div id="chatOutput" class="output">Arcane AI ready...</div>
+    </section>
 
-    <textarea id="chatInput" placeholder="Talk to Arcane AI..."></textarea>
-    <button onclick="sendChat()">ASK ARCANE</button>
+    <section class="card">
+      <h2>🎨 AI Image Generator</h2>
+      <p>Describe an image and Arcane AI will create it.</p>
 
-    <div id="chatOutput" class="output">Arcane AI ready...</div>
+      <input id="imageInput" placeholder="Describe your image..." />
+      <button onclick="createImage()">CREATE IMAGE</button>
+
+      <div id="imageOutput" class="output">Image system ready...</div>
+      <img id="generatedImage" />
+    </section>
+
+    <section class="card">
+      <h2>🌀 Signal Catcher</h2>
+      <p>Type chaotic text and Arcane AI will turn it into meaning.</p>
+
+      <textarea id="signalInput" placeholder="Type random chaos here..."></textarea>
+      <button onclick="catchSignal()">CATCH SIGNAL</button>
+
+      <div id="signalOutput" class="output">Signal engine ready...</div>
+    </section>
+
+    <div class="footer">
+      The Great Beyond • Arcane AI • SAFE_MODE
+    </div>
   </div>
 
-  <div class="box">
-    <h2>🎨 AI Image Generator</h2>
-    <p>Describe an image and Arcane AI will create it.</p>
+  <script>
+    const BACKEND_URL = window.location.origin;
 
-    <input id="imageInput" placeholder="Describe your image...">
-    <button onclick="makeImage()">CREATE IMAGE</button>
+    async function askArcane() {
+      const input = document.getElementById("chatInput").value.trim();
+      const output = document.getElementById("chatOutput");
 
-    <div id="imageOutput" class="output">Image system ready...</div>
-  </div>
+      if (!input) {
+        output.textContent = "Type something first.";
+        return;
+      }
 
-  <div class="box">
-    <h2>🌀 GIF Portal</h2>
-    <p>Type a GIF idea. Arcane AI will open a moving portal.</p>
+      output.textContent = "Arcane AI is thinking...";
 
-    <input id="gifInput" placeholder="Describe your GIF idea...">
-    <button onclick="makeGif()">CREATE GIF PORTAL</button>
+      try {
+        const res = await fetch(`${BACKEND_URL}/chat`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
+            message: input
+          })
+        });
 
-    <div id="gifOutput" class="output">GIF portal ready...</div>
-  </div>
+        const data = await res.json();
 
-</div>
+        if (!res.ok) {
+          throw new Error(data.error || "Chat failed.");
+        }
 
-<script>
-async function sendChat(){
-  const message = document.getElementById("chatInput").value;
-  const output = document.getElementById("chatOutput");
-
-  output.innerText = "Arcane AI thinking...";
-
-  try{
-    const res = await fetch("/chat",{
-      method:"POST",
-      headers:{"Content-Type":"application/json"},
-      body:JSON.stringify({message})
-    });
-
-    const data = await res.json();
-    output.innerText = data.reply || data.error;
-  }catch(err){
-    output.innerText = "Connection failed.";
-  }
-}
-
-async function makeImage(){
-  const prompt = document.getElementById("imageInput").value;
-  const output = document.getElementById("imageOutput");
-
-  output.innerText = "Generating image...";
-
-  try{
-    const res = await fetch("/image",{
-      method:"POST",
-      headers:{"Content-Type":"application/json"},
-      body:JSON.stringify({prompt})
-    });
-
-    const data = await res.json();
-
-    if(data.image){
-      output.innerHTML = `<img src="data:image/png;base64,${data.image}">`;
-    }else{
-      output.innerText = data.error;
+        output.textContent = data.reply || "No reply received.";
+      } catch (err) {
+        output.textContent = "Arcane AI chat failed.";
+        console.error(err);
+      }
     }
-  }catch(err){
-    output.innerText = "Image connection failed.";
-  }
-}
 
-function makeGif(){
-  const prompt = document.getElementById("gifInput").value;
-  const output = document.getElementById("gifOutput");
+    async function createImage() {
+      const prompt = document.getElementById("imageInput").value.trim();
+      const output = document.getElementById("imageOutput");
+      const img = document.getElementById("generatedImage");
 
-  const gifs = [
-    "https://media.giphy.com/media/3o7aD2saalBwwftBIY/giphy.gif",
-    "https://media.giphy.com/media/l0HlBO7eyXzSZkJri/giphy.gif",
-    "https://media.giphy.com/media/ICOgUNjpvO0PC/giphy.gif",
-    "https://media.giphy.com/media/26BRuo6sLetdllPAQ/giphy.gif"
-  ];
+      if (!prompt) {
+        output.textContent = "Describe an image first.";
+        return;
+      }
 
-  const gif = gifs[Math.floor(Math.random() * gifs.length)];
+      output.textContent = "Creating image...";
+      img.style.display = "none";
 
-  output.innerHTML =
-    `<p>🌀 Arcane AI opened a GIF portal for: ${prompt || "random signal"}</p>
-     <img src="${gif}">`;
-}
-</script>
+      try {
+        const res = await fetch(`${BACKEND_URL}/image`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
+            prompt: prompt
+          })
+        });
 
+        const data = await res.json();
+
+        if (!res.ok) {
+          throw new Error(data.error || "Image failed.");
+        }
+
+        output.textContent = "Image created.";
+        img.src = data.image;
+        img.style.display = "block";
+      } catch (err) {
+        output.textContent = "Image generation failed.";
+        console.error(err);
+      }
+    }
+
+    async function catchSignal() {
+      const signal = document.getElementById("signalInput").value.trim();
+      const output = document.getElementById("signalOutput");
+
+      if (!signal) {
+        output.textContent = "Type chaotic text first.";
+        return;
+      }
+
+      output.textContent = "Catching signal...";
+
+      try {
+        const res = await fetch(`${BACKEND_URL}/chat`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
+            message:
+              "Decode this chaotic signal into meaning for The Great Beyond SAFE_MODE. Keep it creative, safe, and understandable:\\n\\n" +
+              signal
+          })
+        });
+
+        const data = await res.json();
+
+        if (!res.ok) {
+          throw new Error(data.error || "Signal failed.");
+        }
+
+        output.textContent = data.reply || "No signal found.";
+      } catch (err) {
+        output.textContent = "Signal catcher failed.";
+        console.error(err);
+      }
+    }
+  </script>
 </body>
 </html>
