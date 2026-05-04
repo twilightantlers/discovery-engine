@@ -23,27 +23,15 @@ app.post("/chat", async (req, res) => {
   try {
     const { message } = req.body;
 
-    if (!message) {
-      return res.status(400).json({
-        error: "No message provided."
-      });
-    }
-
     const response = await client.responses.create({
       model: "gpt-4.1-mini",
       input: message
     });
 
-    res.json({
-      reply: response.output_text
-    });
-
+    res.json({ reply: response.output_text });
   } catch (error) {
     console.error("CHAT ERROR:", error);
-
-    res.status(500).json({
-      error: "Arcane AI chat failed."
-    });
+    res.status(500).json({ error: error.message });
   }
 });
 
@@ -51,28 +39,20 @@ app.post("/image", async (req, res) => {
   try {
     const { prompt } = req.body;
 
-    if (!prompt) {
-      return res.status(400).json({
-        error: "No prompt provided."
-      });
-    }
-
     const response = await client.images.generate({
       model: "gpt-image-1",
-      prompt: prompt,
+      prompt,
       size: "1024x1024"
     });
 
-    res.json({
-      image: response.data[0].url
-    });
+    const imageBase64 = response.data[0].b64_json;
 
+    res.json({
+      image: `data:image/png;base64,${imageBase64}`
+    });
   } catch (error) {
     console.error("IMAGE ERROR:", error);
-
-    res.status(500).json({
-      error: "Image generation failed."
-    });
+    res.status(500).json({ error: error.message });
   }
 });
 
