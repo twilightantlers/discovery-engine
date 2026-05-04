@@ -1,4 +1,4 @@
-# # The Great Beyond
+# # Arcane AI
 
 A living discovery engine where chaos becomes signal.
 
