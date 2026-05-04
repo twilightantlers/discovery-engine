@@ -7,103 +7,77 @@ dotenv.config();
 
 const app = express();
 
+app.use(cors());
+app.use(express.json({ limit: "10mb" }));
+app.use(express.static("."));
+
 const client = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY
 });
 
-app.use(cors());
-app.use(express.json());
-
-app.use(express.static("."));
-
 app.get("/", (req, res) => {
-  res.sendFile("index.html", {
-    root: "."
-  });
+  res.send("The Great Beyond AI Running");
 });
 
 app.post("/chat", async (req, res) => {
-
   try {
+    const { message } = req.body;
 
-    const completion =
-      await client.chat.completions.create({
+    if (!message) {
+      return res.status(400).json({
+        error: "No message provided."
+      });
+    }
 
-      model: "gpt-4o-mini",
-
-      messages: [
-        {
-          role: "system",
-          content:
-          "You are Arcane AI, a futuristic helpful assistant."
-        },
-
-        {
-          role: "user",
-          content: req.body.message
-        }
-      ]
-
+    const response = await client.responses.create({
+      model: "gpt-4.1-mini",
+      input: message
     });
 
     res.json({
-      reply:
-      completion.choices[0].message.content
+      reply: response.output_text
     });
 
-  } catch(err){
-
-    console.log(err);
+  } catch (error) {
+    console.error("CHAT ERROR:", error);
 
     res.status(500).json({
-      error:
-      "Arcane AI chat failed."
+      error: "Arcane AI chat failed."
     });
-
   }
-
 });
 
 app.post("/image", async (req, res) => {
-
   try {
+    const { prompt } = req.body;
 
-    const image =
-      await client.images.generate({
+    if (!prompt) {
+      return res.status(400).json({
+        error: "No prompt provided."
+      });
+    }
 
+    const response = await client.images.generate({
       model: "gpt-image-1",
-
-      prompt: req.body.prompt,
-
+      prompt: prompt,
       size: "1024x1024"
-
     });
 
     res.json({
-      image:
-      image.data[0].b64_json
+      image: response.data[0].url
     });
 
-  } catch(err){
-
-    console.log(err);
+  } catch (error) {
+    console.error("IMAGE ERROR:", error);
 
     res.status(500).json({
-      error:
-      "Arcane AI image failed."
+      error: "Image generation failed."
     });
-
   }
-
 });
 
-const PORT =
-process.env.PORT || 3000;
+const PORT = process.env.PORT || 3000;
 
 app.listen(PORT, () => {
-
-  console.log(
-    "Arcane AI Online"
-  );
-
+  console.log(`The Great Beyond AI running on port ${PORT}`);
 });
