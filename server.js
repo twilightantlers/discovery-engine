@@ -1,61 +1,28 @@
-const terminal = document.getElementById("terminal");
-const input = document.getElementById("userInput");
+import express from "express";
+import cors from "cors";
 
-function addMessage(sender, text) {
-  const msg = document.createElement("div");
-  msg.className = "msg";
+const app = express();
 
-  msg.innerHTML = `
-    <span class="sender">${sender}:</span>
-    <span>${text}</span>
-  `;
+app.use(cors());
+app.use(express.json());
+app.use(express.static("."));
 
-  terminal.appendChild(msg);
+app.get("/", (req, res) => {
+  res.sendFile(process.cwd() + "/index.html");
+});
 
-  terminal.scrollTop = terminal.scrollHeight;
-}
+app.post("/chat", async (req, res) => {
 
-async function sendMessage() {
-  const message = input.value.trim();
+  const message = req.body.message;
 
-  if (!message) return;
+  res.json({
+    reply: `☼ ARCANE SIGNAL RECEIVED ☼ :: ${message}`
+  });
 
-  addMessage("YOU", message);
+});
 
-  input.value = "";
+const PORT = process.env.PORT || 3000;
 
-  try {
-
-    const response = await fetch("/chat", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        message
-      })
-    });
-
-    const data = await response.json();
-
-    if (data.reply) {
-      addMessage("ARCANE", data.reply);
-    } else {
-      addMessage("SYSTEM", "No response.");
-    }
-
-  } catch (err) {
-    console.error(err);
-
-    addMessage(
-      "SYSTEM",
-      "Connection failed."
-    );
-  }
-}
-
-input.addEventListener("keydown", (e) => {
-  if (e.key === "Enter") {
-    sendMessage();
-  }
+app.listen(PORT, () => {
+  console.log(`Arcane online on port ${PORT}`);
 });
