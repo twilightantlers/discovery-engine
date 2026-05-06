@@ -25,20 +25,30 @@ app.post("/chat", async (req, res) => {
     const userMessage = req.body.message || "Hello";
 
     const response = await client.responses.create({
-      model: "gpt-5.5-mini",
-      input: userMessage
+      model: "gpt-5.5",
+      input: `You are Arcane, a peaceful ASCII signal AI. Reply warmly with ASCII faces and no dystopian energy. User said: ${userMessage}`
     });
+
+    res.json({ reply: response.output_text });
+  } catch (err) {
+    console.error("CHAT ERROR:", err);
+    res.status(500).json({ error: "Arcane chat failed." });
+  }
+});
+
+app.post("/gif", async (req, res) => {
+  try {
+    const query = encodeURIComponent(req.body.query || "aesthetic anime sparkle");
+
+    const gifUrl = `https://giphy.com/search/${query}`;
 
     res.json({
-      reply: response.output_text
+      reply: "Here are safe GIF results:",
+      url: gifUrl
     });
-
   } catch (err) {
-    console.error(err);
-
-    res.status(500).json({
-      error: "Arcane signal failure"
-    });
+    console.error("GIF ERROR:", err);
+    res.status(500).json({ error: "GIF search failed." });
   }
 });
 
