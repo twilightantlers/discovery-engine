@@ -6,6 +6,7 @@ import OpenAI from "openai";
 dotenv.config();
 
 const app = express();
+const PORT = process.env.PORT || 3000;
 
 app.use(cors());
 app.use(express.json({ limit: "10mb" }));
@@ -16,48 +17,31 @@ const client = new OpenAI({
 });
 
 app.get("/", (req, res) => {
-  res.send("The Great Beyond AI Running");
+  res.sendFile(process.cwd() + "/index.html");
 });
 
 app.post("/chat", async (req, res) => {
   try {
-    const { message } = req.body;
+    const userMessage = req.body.message || "Hello";
 
     const response = await client.responses.create({
-      model: "gpt-4.1-mini",
-      input: message
+      model: "gpt-5.5-mini",
+      input: userMessage
     });
-
-    res.json({ reply: response.output_text });
-  } catch (error) {
-    console.error("CHAT ERROR:", error);
-    res.status(500).json({ error: error.message });
-  }
-});
-
-app.post("/image", async (req, res) => {
-  try {
-    const { prompt } = req.body;
-
-    const response = await client.images.generate({
-      model: "gpt-image-1",
-      prompt,
-      size: "1024x1024"
-    });
-
-    const imageBase64 = response.data[0].b64_json;
 
     res.json({
-      image: `data:image/png;base64,${imageBase64}`
+      reply: response.output_text
     });
-  } catch (error) {
-    console.error("IMAGE ERROR:", error);
-    res.status(500).json({ error: error.message });
+
+  } catch (err) {
+    console.error(err);
+
+    res.status(500).json({
+      error: "Arcane signal failure"
+    });
   }
 });
 
-const PORT = process.env.PORT || 3000;
-
 app.listen(PORT, () => {
-  console.log(`The Great Beyond AI running on port ${PORT}`);
+  console.log(`Arcane server running on port ${PORT}`);
 });
