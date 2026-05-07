@@ -1,28 +1,45 @@
-import express from "express";
-import cors from "cors";
+import OpenAI from "openai";
 
-const app = express();
-
-app.use(cors());
-app.use(express.json());
-app.use(express.static("."));
-
-app.get("/", (req, res) => {
-  res.sendFile(process.cwd() + "/index.html");
+const client = new OpenAI({
+  apiKey: process.env.OPENAI_API_KEY
 });
 
 app.post("/chat", async (req, res) => {
 
-  const message = req.body.message;
+  try {
 
-  res.json({
-    reply: `☼ ARCANE SIGNAL RECEIVED ☼ :: ${message}`
-  });
+    const text = req.body.message;
 
-});
+    const completion =
+      await client.chat.completions.create({
+        model: "gpt-4.1-mini",
+        messages: [
+          {
+            role: "system",
+            content:
+              "You are Arcane, a glowing ASCII signal AI."
+          },
+          {
+            role: "user",
+            content: text
+          }
+        ]
+      });
 
-const PORT = process.env.PORT || 3000;
+    res.json({
+      reply:
+        completion.choices[0].message.content
+    });
 
-app.listen(PORT, () => {
-  console.log(`Arcane online on port ${PORT}`);
+  } catch (err) {
+
+    console.error(err);
+
+    res.json({
+      reply:
+        "☼ Arcane signal distortion detected ☼"
+    });
+
+  }
+
 });
