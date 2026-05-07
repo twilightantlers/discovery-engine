@@ -1,89 +1,33 @@
-const chat = document.getElementById("chat");
-const msg = document.getElementById("msg");
-const sendBtn = document.getElementById("sendBtn");
-const canvas = document.getElementById("bg");
-const ctx = canvas.getContext("2d");
+import express from "express";
+import cors from "cors";
 
-function add(sender, text) {
-  const p = document.createElement("p");
-  p.innerHTML = `<b>${sender}:</b> ${text}`;
-  chat.appendChild(p);
-  chat.scrollTop = chat.scrollHeight;
-}
+const app = express();
 
-async function send() {
-  const text = msg.value.trim();
+app.use(cors());
+app.use(express.json());
+app.use(express.static("."));
 
-  if (!text) return;
-
-  add("YOU", text);
-  msg.value = "";
-
-  try {
-    const res = await fetch("/chat", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        message: text
-      })
-    });
-
-    const data = await res.json();
-
-    add("ARCANE", data.reply || "No reply.");
-  } catch (err) {
-    add("SYSTEM", "Send failed.");
-  }
-}
-
-sendBtn.addEventListener("click", send);
-
-msg.addEventListener("keydown", function (e) {
-  if (e.key === "Enter") {
-    send();
-  }
+app.get("/", (req, res) => {
+  res.sendFile(process.cwd() + "/index.html");
 });
 
-function resizeCanvas() {
-  canvas.width = window.innerWidth;
-  canvas.height = window.innerHeight;
-}
+app.post("/chat", (req, res) => {
 
-resizeCanvas();
+  const message =
+    req.body.message || "hello";
 
-const particles = [];
-
-for (let i = 0; i < 80; i++) {
-  particles.push({
-    x: Math.random() * canvas.width,
-    y: Math.random() * canvas.height,
-    r: Math.random() * 2 + 1,
-    s: Math.random() * 0.6 + 0.2
+  res.json({
+    reply:
+      "☼ ARCANE ONLINE ☼ :: " + message
   });
-}
 
-function animateParticles() {
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
-  ctx.fillStyle = "#9d7bff";
+});
 
-  for (const p of particles) {
-    ctx.beginPath();
-    ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
-    ctx.fill();
+const PORT =
+  process.env.PORT || 3000;
 
-    p.y -= p.s;
-
-    if (p.y < 0) {
-      p.y = canvas.height;
-      p.x = Math.random() * canvas.width;
-    }
-  }
-
-  requestAnimationFrame(animateParticles);
-}
-
-animateParticles();
-
-window.addEventListener("resize", resizeCanvas);
+app.listen(PORT, () => {
+  console.log(
+    "Arcane running on port " + PORT
+  );
+});
