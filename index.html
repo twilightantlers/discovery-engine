@@ -3,54 +3,14 @@
 <head>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Arcane</title>
-  <style>
-    body {
-      margin: 0;
-      background: #080615;
-      color: white;
-      font-family: Arial, sans-serif;
-      padding: 20px;
-    }
-
-    .box {
-      max-width: 700px;
-      margin: auto;
-      background: #141126;
-      border: 1px solid #8b5cff;
-      border-radius: 16px;
-      padding: 20px;
-    }
-
-    #chat {
-      height: 350px;
-      overflow-y: auto;
-      background: #05040d;
-      border-radius: 12px;
-      padding: 12px;
-      margin-bottom: 12px;
-    }
-
-    input {
-      width: 70%;
-      padding: 14px;
-      border-radius: 10px;
-      border: none;
-    }
-
-    button {
-      padding: 14px;
-      border-radius: 10px;
-      border: none;
-      background: #8b5cff;
-      color: white;
-      font-weight: bold;
-    }
-  </style>
+  <link rel="stylesheet" href="style.css">
 </head>
-
 <body>
+  <canvas id="bg"></canvas>
+
   <div class="box">
     <h1>☼ ARCANE ☼</h1>
+    <p>ASCII Signal Terminal</p>
 
     <div id="chat"></div>
 
@@ -58,42 +18,6 @@
     <button id="sendBtn">SEND</button>
   </div>
 
-  <script>
-    const chat = document.getElementById("chat");
-    const msg = document.getElementById("msg");
-    const sendBtn = document.getElementById("sendBtn");
-
-    function add(sender, text) {
-      chat.innerHTML += `<p><b>${sender}:</b> ${text}</p>`;
-      chat.scrollTop = chat.scrollHeight;
-    }
-
-    async function send() {
-      const text = msg.value.trim();
-      if (!text) return;
-
-      add("YOU", text);
-      msg.value = "";
-
-      try {
-        const res = await fetch("/chat", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ message: text })
-        });
-
-        const data = await res.json();
-        add("ARCANE", data.reply || "No reply.");
-      } catch (e) {
-        add("SYSTEM", "Send failed.");
-      }
-    }
-
-    sendBtn.addEventListener("click", send);
-
-    msg.addEventListener("keydown", function(e) {
-      if (e.key === "Enter") send();
-    });
-  </script>
+  <script src="script.js"></script>
 </body>
 </html>
